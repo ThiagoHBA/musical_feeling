@@ -81,4 +81,19 @@ class MusicPlayerController {
             playSound(soundName: soundName)
         }
     }
+    
+    func updateInteration(actualInteration : inout (position: Int, counter: Int)) {
+        if actualInteration.position > 0 {
+            if actualInteration.counter < 2 {
+                actualInteration.counter += 1
+            }
+            else {
+                actualInteration.position += 1
+                actualInteration.counter = 0
+            }
+        }
+        else{
+            actualInteration.position += 1
+        }
+    }
 }

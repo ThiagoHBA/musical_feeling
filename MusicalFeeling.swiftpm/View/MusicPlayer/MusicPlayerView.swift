@@ -99,18 +99,7 @@ struct MusicPlayerView: View {
                     }
                     
                     withAnimation(.spring(response: 1)) {
-                        if actualInteration.position > 0 {
-                            if actualInteration.counter < 2 {
-                                actualInteration.counter += 1
-                            }
-                            else {
-                                actualInteration.position += 1
-                                actualInteration.counter = 0
-                            }
-                        }
-                        else{
-                            actualInteration.position += 1
-                        }
+                        controller.updateInteration(actualInteration: &actualInteration)
                     }
                     
                 } label: {
@@ -118,7 +107,9 @@ struct MusicPlayerView: View {
                         .foregroundColor(.black)
                         .padding(25)
                     .font(.system(size: 25, weight: .bold))}
+                
                 Spacer()
+                
                 SpeedControllComponent(musicSpeed: $musicSpeed)
             }
             
