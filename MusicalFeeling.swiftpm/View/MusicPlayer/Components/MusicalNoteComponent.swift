@@ -9,8 +9,9 @@ struct MusicalNoteComponentView: View {
     
     var body: some View {
             Text(self.musicalNoteModel.note.rawValue)
-                .font(.system(size: 65))
-                .padding()
+            .frame(maxWidth: 80, alignment: .center)
+                .font(.system(size: 50))
+                .padding(15)
                 .background(self.musicalNoteModel!.color)
                 .cornerRadius(25)
                 .position(

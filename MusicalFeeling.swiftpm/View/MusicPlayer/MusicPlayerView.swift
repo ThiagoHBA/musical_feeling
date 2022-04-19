@@ -111,7 +111,7 @@ struct MusicPlayerView: View {
                         noteFileNames.append(musicalNote.note.rawValue)
                     }
                     if !noteFileNames.isEmpty {
-                        controller.playMutipleSounds(soundFileNames: noteFileNames)
+                        controller.playMutipleSounds(soundFileNames: noteFileNames, withDelay: musicSpeed)
                     }
 //
 //                    withAnimation(.spring(response: 1)) {

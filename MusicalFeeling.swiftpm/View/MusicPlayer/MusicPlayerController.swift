@@ -1,10 +1,3 @@
-//
-//  SwiftUIView.swift
-//  
-//
-//  Created by Thiago Henrique on 12/04/22.
-//
-
 import SwiftUI
 import AVFoundation
 
@@ -76,12 +69,6 @@ class MusicPlayerController {
         
     }
     
-    func playMutipleSounds(soundFileNames: [String]) {
-        for soundName in soundFileNames {
-            playSound(soundName: soundName)
-        }
-    }
-    
     func updateInteration(actualInteration : inout (position: Int, counter: Int)) {
         if actualInteration.position > 0 {
             if actualInteration.counter < 2 {
@@ -95,5 +82,22 @@ class MusicPlayerController {
         else{
             actualInteration.position += 1
         }
+    }
+    
+    func playMutipleSounds(soundFileNames: [String]) {
+        for soundName in soundFileNames {
+            playSound(soundName: soundName)
+        }
+    }
+    
+    func playMutipleSounds(soundFileNames: [String], withDelay: Int) {
+        DispatchQueue.global(qos: .default).async {
+            for soundName in soundFileNames {
+                  DispatchQueue.main.async {
+                      self.playSound(soundName: soundName)
+                  }
+                usleep(useconds_t(1000000 / withDelay))
+              }
+         }
     }
 }
