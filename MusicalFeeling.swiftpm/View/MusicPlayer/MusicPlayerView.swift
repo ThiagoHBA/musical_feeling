@@ -7,6 +7,8 @@ struct MusicPlayerView: View {
     @State private var notesInsideMusicalDiagram : [MusicalNote] = []
     @State private var musicSpeed = 1
     
+    @State private var actualInteration = (position: 0, counter: 0)
+    
     @State private var notes: [MusicalNote] = [
         MusicalNote (
             note: Note.C,
@@ -76,6 +78,14 @@ struct MusicPlayerView: View {
                             )
                     }
                 }
+                
+                if let interation = Interations.init(rawValue: actualInteration.position) {
+                    InterationText(
+                        text: interation.interationArray[actualInteration.counter].text,
+                        yOffSet: interation.interationArray[actualInteration.counter].screenPosition.screenOffSet
+                    )
+                }
+    
             }
             
             HStack{
@@ -87,6 +97,22 @@ struct MusicPlayerView: View {
                     if !noteFileNames.isEmpty {
                         controller.playMutipleSounds(soundFileNames: noteFileNames)
                     }
+                    
+                    withAnimation(.spring(response: 1)) {
+                        if actualInteration.position > 0 {
+                            if actualInteration.counter < 2 {
+                                actualInteration.counter += 1
+                            }
+                            else {
+                                actualInteration.position += 1
+                                actualInteration.counter = 0
+                            }
+                        }
+                        else{
+                            actualInteration.position += 1
+                        }
+                    }
+                    
                 } label: {
                     Label("Play", systemImage: "play.fill")
                         .foregroundColor(.black)

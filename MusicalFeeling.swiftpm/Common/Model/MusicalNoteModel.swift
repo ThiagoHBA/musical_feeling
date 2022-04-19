@@ -8,4 +8,4 @@ struct MusicalNote{
     var color: Color
 }
 
-extension MusicalNote: Identifiable { }
+extension MusicalNote : Identifiable { }
