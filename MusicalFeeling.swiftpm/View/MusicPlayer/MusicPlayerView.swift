@@ -11,7 +11,7 @@ struct MusicPlayerView: View {
     
     @State private var notes: [MusicalNote] = [
         MusicalNote (
-            note: Note.C,
+            note: Note.C    ,
             position: CGPoint(
                 x: UIScreen.main.bounds.size.width * 0.06,
                 y: UIScreen.main.bounds.size.height * 0.1
@@ -19,7 +19,7 @@ struct MusicPlayerView: View {
             color: Color.gray
         ),
         MusicalNote (
-            note: Note.D,
+            note: Note.E,
             position: CGPoint(
                 x: UIScreen.main.bounds.size.width * 0.06,
                 y: UIScreen.main.bounds.size.height * 0.1
@@ -27,7 +27,23 @@ struct MusicPlayerView: View {
             color: Color.gray
         ),
         MusicalNote (
-            note: Note.D,
+            note: Note.G,
+            position: CGPoint(
+                x: UIScreen.main.bounds.size.width * 0.06,
+                y: UIScreen.main.bounds.size.height * 0.1
+            ),
+            color: Color.gray
+        ),
+        MusicalNote (
+            note: Note.Eb,
+            position: CGPoint(
+                x: UIScreen.main.bounds.size.width * 0.06,
+                y: UIScreen.main.bounds.size.height * 0.1
+            ),
+            color: Color.gray
+        ),
+        MusicalNote (
+            note: Note.Ab,
             position: CGPoint(
                 x: UIScreen.main.bounds.size.width * 0.06,
                 y: UIScreen.main.bounds.size.height * 0.1
@@ -97,10 +113,10 @@ struct MusicPlayerView: View {
                     if !noteFileNames.isEmpty {
                         controller.playMutipleSounds(soundFileNames: noteFileNames)
                     }
-                    
-                    withAnimation(.spring(response: 1)) {
-                        controller.updateInteration(actualInteration: &actualInteration)
-                    }
+//
+//                    withAnimation(.spring(response: 1)) {
+//                        controller.updateInteration(actualInteration: &actualInteration)
+//                    }
                     
                 } label: {
                     Label("Play", systemImage: "play.fill")
