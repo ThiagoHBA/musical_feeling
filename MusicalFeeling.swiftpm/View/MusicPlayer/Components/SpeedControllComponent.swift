@@ -13,11 +13,11 @@ struct SpeedControllComponent: View {
     var body: some View {
         HStack(alignment: .center) {
             Button {
-                if musicSpeed < 8 {
-                    musicSpeed *= 2
+                if musicSpeed > 1 {
+                    musicSpeed /= 2
                 }
             } label: {
-                generalButtonLabel(label: "+")
+                generalButtonLabel(label: "-")
             }
             Spacer()
             Button {} label: {
@@ -25,13 +25,14 @@ struct SpeedControllComponent: View {
             }
             Spacer()
             Button {
-                if musicSpeed > 1 {
-                    musicSpeed /= 2
+                if musicSpeed < 8 {
+                    musicSpeed *= 2
                 }
             } label: {
-                generalButtonLabel(label: "-")
+                generalButtonLabel(label: "+")
             }
             
+
         }.frame(width: 150, height: 25)
             .padding(15)
             .clipShape(Capsule())

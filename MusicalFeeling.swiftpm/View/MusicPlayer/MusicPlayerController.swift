@@ -1,26 +1,40 @@
 import SwiftUI
 import AVFoundation
 
-class MusicPlayerController {
-    var players = [URL:AVAudioPlayer]()
-    var duplicatePlayers = [AVAudioPlayer]()
+class MusicPlayerController : ObservableObject {
+    @Published var musicSpeed = 2
+    @Published var notesInsideMusicalDiagram : [MusicalNote] = []
+    @Published var actualInteractionCounter : Int = 0
+    
+    @Published var notes : [MusicalNote]
+    let nextInteraction : Interations
+    
+    init(notes: [MusicalNote], nextInteraction: Interations) {
+        self.notes = notes
+        self.nextInteraction = nextInteraction
+    }
+    
+    private var players = [URL:AVAudioPlayer]()
+    private var duplicatePlayers = [AVAudioPlayer]()
     
     var rectanglePosition = CGPoint (
         x: UIScreen.main.bounds.size.width * 0.5,
         y: UIScreen.main.bounds.size.height * 0.5
     )
     
-    var rectangleFrame : (CGFloat, CGFloat) = (
+    var rectangleFrame = (
         width: UIScreen.main.bounds.width * 0.9,
-        height: 300
+        height: 300.0
     )
     
-    func musicalRectangleContainsItem(itemPosition: CGPoint) -> Bool {
+    func musicalRectangleContainsItem(itemPosition: CGPoint?) -> Bool {
+        if itemPosition == nil {return false}
+        
         func checkYAxis() -> Bool {
-            let initialRectanglePosition = self.rectanglePosition.y - (self.rectangleFrame.1/2)
-            let finalRectanglePosition = self.rectanglePosition.y + (self.rectangleFrame.1/2)
+            let initialRectanglePosition = self.rectanglePosition.y - (self.rectangleFrame.height/2)
+            let finalRectanglePosition = self.rectanglePosition.y + (self.rectangleFrame.height/4)
             
-            return initialRectanglePosition < itemPosition.y && finalRectanglePosition > itemPosition.y
+            return itemPosition!.y > initialRectanglePosition && itemPosition!.y < finalRectanglePosition
         }
         
         func checkXAxis() -> Bool {
@@ -69,19 +83,29 @@ class MusicPlayerController {
         
     }
     
-    func updateInteration(actualInteration : inout (position: Int, counter: Int)) {
-        if actualInteration.position > 0 {
-            if actualInteration.counter < 2 {
-                actualInteration.counter += 1
-            }
-            else {
-                actualInteration.position += 1
-                actualInteration.counter = 0
-            }
+    func updateInteration(interactionArray: [UserInterationModel]) -> Bool {
+        if self.actualInteractionCounter < interactionArray.count - 1 {
+            self.actualInteractionCounter += 1
+            return true
         }
-        else{
-            actualInteration.position += 1
-        }
+        
+        self.actualInteractionCounter = 0
+        return false
+        
+//        if actualInteraction.position > 0 {
+//            guard let interation = Interations.init(rawValue: actualInteraction.position) else {return}
+//
+//            if actualInteraction.counter < interation.interationArray.count - 1 {
+//                actualInteraction.counter += 1
+//            }
+//            else {
+//                actualInteraction.position += 1
+//                actualInteraction.counter = 0
+//            }
+//        }
+//        else{
+//            actualInteraction.position += 1
+//        }
     }
     
     func playMutipleSounds(soundFileNames: [String]) {
