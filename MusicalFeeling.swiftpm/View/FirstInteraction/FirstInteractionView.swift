@@ -1,10 +1,3 @@
-//
-//  SwiftUIView.swift
-//  
-//
-//  Created by Thiago Henrique on 20/04/22.
-//
-
 import SwiftUI
 
 struct FirstInteractionView : View {
@@ -20,8 +13,6 @@ struct FirstInteractionView : View {
         )
     }
 }
-
-
 
 // State -> Binding (struct)
 // StateObject -> ObservedObject (class)

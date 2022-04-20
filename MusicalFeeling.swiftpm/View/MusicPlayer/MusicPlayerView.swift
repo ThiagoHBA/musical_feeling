@@ -19,22 +19,26 @@ struct MusicPlayerView: View {
                     .position(actualInteractionController.rectanglePosition)
                 
                 HStack{
+                    let actualInteraction = mainController.currentInteraction.interationArray[actualInteractionController.actualInteractionCounter]
+                    
                     ForEach($actualInteractionController.notes) {
                         $note in
-                        
                         MusicalNoteComponentView(musicalNoteModel: note)
                             .gesture(
                                 DragGesture()
                                     .onChanged { value in
-                                        note.position.x = value.location.x
-                                        note.position.y = value.location.y
                                         
-                                        note.color = Color.gray
-                                        
-                                        if actualInteractionController.musicalRectangleContainsItem(itemPosition: note.position) {
-                                            note.color = Color.red
+                                        if !actualInteraction.disableNoteDrag {
+                                            note.position.x = value.location.x
+                                            note.position.y = value.location.y
+                                            
+                                            note.color = Color.gray
+                                            
+                                            if actualInteractionController.musicalRectangleContainsItem(itemPosition: note.position) {
+                                                note.color = Color.red
+                                            }
+                                
                                         }
-                                        
                                     }.onEnded { value in
                                         withAnimation(.spring()) {
                                             if actualInteractionController.musicalRectangleContainsItem(itemPosition: note.position) {
@@ -58,8 +62,7 @@ struct MusicPlayerView: View {
                     InterationText(
                         interaction: interationArray[actualInteractionController.actualInteractionCounter],
                         hide: false
-                    )
-                        .animation(.spring(response: 1), value: actualInteractionController.actualInteractionCounter)
+                    ).animation(.spring(response: 1), value: actualInteractionController.actualInteractionCounter)
                 }
                 
             }.onReceive((timer)) { time in
@@ -78,7 +81,6 @@ struct MusicPlayerView: View {
                     
                     timeRemaining = interactionArray[actualInteractionController.actualInteractionCounter].duration
                 }
-                
             }
             
             HStack{
