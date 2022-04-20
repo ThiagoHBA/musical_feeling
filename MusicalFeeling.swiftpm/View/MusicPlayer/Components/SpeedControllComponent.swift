@@ -1,14 +1,8 @@
-//
-//  SwiftUIView.swift
-//  
-//
-//  Created by Thiago Henrique on 18/04/22.
-//
-
 import SwiftUI
 
 struct SpeedControllComponent: View {
     @Binding var musicSpeed : Int
+    var disable : Bool
     
     var body: some View {
         HStack(alignment: .center) {
@@ -18,19 +12,25 @@ struct SpeedControllComponent: View {
                 }
             } label: {
                 generalButtonLabel(label: "-")
-            }
+            }.disabled(disable)
+            
             Spacer()
-            Button {} label: {
+            
+            Button {}
+            label: {
                 generalButtonLabel(label: "\(String(musicSpeed))x")
             }
+            .disabled(disable)
+            
             Spacer()
+            
             Button {
                 if musicSpeed < 8 {
                     musicSpeed *= 2
                 }
             } label: {
                 generalButtonLabel(label: "+")
-            }
+            }.disabled(disable)
             
 
         }.frame(width: 150, height: 25)
@@ -41,7 +41,7 @@ struct SpeedControllComponent: View {
     @ViewBuilder
     func generalButtonLabel(label: String) -> some View {
         Text(label)
-            .foregroundColor(.black)
+            .foregroundColor(disable ? .gray : .black)
             .font(.system(size: 30, weight: .bold))
     }
 }

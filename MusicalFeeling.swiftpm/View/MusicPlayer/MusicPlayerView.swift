@@ -3,13 +3,11 @@ import AVFoundation
 
 
 struct MusicPlayerView: View {
-    @ObservedObject private var actualInteractionController : MusicPlayerController
-    @ObservedObject private var mainController : MainViewController
+    @ObservedObject var actualInteractionController : MusicPlayerController
+    @ObservedObject var mainController : MainViewController
+    @State private var timeRemaining : Int?
     
-    public init(actualInteractionController: MusicPlayerController, mainController : MainViewController) {
-        self.actualInteractionController = actualInteractionController
-        self.mainController = mainController
-    }
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var body: some View {
         VStack{
@@ -19,7 +17,6 @@ struct MusicPlayerView: View {
                     .frame(height: actualInteractionController.rectangleFrame.1)
                     .padding(35)
                     .position(actualInteractionController.rectanglePosition)
-                
                 
                 HStack{
                     ForEach($actualInteractionController.notes) {
@@ -59,15 +56,39 @@ struct MusicPlayerView: View {
                 
                 if let interationArray = mainController.obtainInteractionArray() {
                     InterationText(
-                        text: interationArray[actualInteractionController.actualInteractionCounter].text,
-                        yOffSet: interationArray[actualInteractionController.actualInteractionCounter].screenPosition.screenOffSet
+                        interaction: interationArray[actualInteractionController.actualInteractionCounter],
+                        hide: false
                     )
+                        .animation(.spring(response: 1), value: actualInteractionController.actualInteractionCounter)
+                }
+                
+            }.onReceive((timer)) { time in
+                let interactionArray = mainController.obtainInteractionArray()
+           
+                if timeRemaining != nil {
+                    if timeRemaining! > 0 {
+                        timeRemaining! -= 1
+                        return
+                    }
+                    
+                    if !(actualInteractionController.updateInteration(interactionArray: interactionArray)) {
+                        mainController.currentInteraction = actualInteractionController.nextInteraction
+                        return
+                    }
+                    
+                    timeRemaining = interactionArray[actualInteractionController.actualInteractionCounter].duration
                 }
                 
             }
             
             HStack{
+                let interactionArray = mainController.obtainInteractionArray()
+                let buttonDisable : Bool = interactionArray[actualInteractionController.actualInteractionCounter].disablePlayButton
+                let speedDisable : Bool = interactionArray[actualInteractionController.actualInteractionCounter].disableSpeedControl
+                
                 Button {
+                    if buttonDisable {return}
+                    
                     var noteFileNames : [String] = []
                     
                     for musicalNote in actualInteractionController.notesInsideMusicalDiagram {
@@ -75,25 +96,36 @@ struct MusicPlayerView: View {
                     }
                     
                     if !noteFileNames.isEmpty {
-                        actualInteractionController.playMutipleSounds(soundFileNames: noteFileNames, withDelay: actualInteractionController.musicSpeed)
+                        actualInteractionController.playMutipleSounds (
+                            soundFileNames: noteFileNames,
+                            withDelay: actualInteractionController.musicSpeed
+                        )
                     }
                     
-                    withAnimation(.spring(response: 1)) {
-                        if !(actualInteractionController.updateInteration(interactionArray: mainController.obtainInteractionArray())) {
-                            mainController.currentInteraction = actualInteractionController.nextInteraction
-                        }
+                    if !(actualInteractionController.updateInteration(interactionArray: interactionArray)) {
+                        mainController.currentInteraction = actualInteractionController.nextInteraction
                     }
+                    
+                    timeRemaining = interactionArray[actualInteractionController.actualInteractionCounter].duration
                     
                 } label: {
                     Label("Play", systemImage: "play.fill")
-                        .foregroundColor(.black)
-                    .font(.system(size: 25, weight: .bold))}
+                        .foregroundColor(buttonDisable ? .gray : .black)
+                        .font(.system(size: 25, weight: .bold))
+                }.disabled(buttonDisable)
                 
                 Spacer()
                 
-                SpeedControllComponent(musicSpeed: $actualInteractionController.musicSpeed)
+                SpeedControllComponent(
+                    musicSpeed: $actualInteractionController.musicSpeed,
+                    disable: speedDisable
+                )
+                
             }.padding(35)
             
+        }
+        .onAppear {
+            timeRemaining = mainController.currentInteraction.interationArray[actualInteractionController.actualInteractionCounter].duration
         }
     }
 }

@@ -5,8 +5,8 @@ class MusicPlayerController : ObservableObject {
     @Published var musicSpeed = 2
     @Published var notesInsideMusicalDiagram : [MusicalNote] = []
     @Published var actualInteractionCounter : Int = 0
-    
     @Published var notes : [MusicalNote]
+    
     let nextInteraction : Interations
     
     init(notes: [MusicalNote], nextInteraction: Interations) {
@@ -123,5 +123,10 @@ class MusicPlayerController : ObservableObject {
                 usleep(useconds_t(1000000 / withDelay))
               }
          }
+    }
+    
+    func hideText(duration: Int) -> Bool {
+        
+        return false
     }
 }
