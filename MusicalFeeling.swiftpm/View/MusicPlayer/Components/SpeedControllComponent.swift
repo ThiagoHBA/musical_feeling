@@ -2,7 +2,9 @@ import SwiftUI
 
 struct SpeedControllComponent: View {
     @Binding var musicSpeed : Int
+    @State var font = Font.title
     var disable : Bool
+    var focus: Bool = true
     
     var body: some View {
         HStack(alignment: .center) {
@@ -17,10 +19,10 @@ struct SpeedControllComponent: View {
             Spacer()
             
             Button {}
-            label: {
-                generalButtonLabel(label: "\(String(musicSpeed))x")
-            }
-            .disabled(disable)
+        label: {
+            generalButtonLabel(label: "\(String(musicSpeed))x")
+        }
+        .disabled(disable)
             
             Spacer()
             
@@ -32,17 +34,38 @@ struct SpeedControllComponent: View {
                 generalButtonLabel(label: "+")
             }.disabled(disable)
             
+            
+        }
+        .background(.white)
+        .frame(width: 180.0, height: 50.0)
+        .clipShape(Capsule())
+        .padding(15)
+        .shadow(color: .black, radius: 5, y: 5
+        )
+        .onAppear {
+//            if focus {
+//                
+//                DispatchQueue.global(qos: .default).async {
+//                    for _ in 0...3 {
+//                        DispatchQueue.main.async {
+//                              font = .largeTitle
+//                          }
+//                        usleep(1000000)
+//                        font = .title
+//                      }
+//                 }
+//                
+//            }
+            
+        }
+}
 
-        }.frame(width: 150, height: 25)
-            .padding(15)
-            .clipShape(Capsule())
-    }
-    
     @ViewBuilder
     func generalButtonLabel(label: String) -> some View {
         Text(label)
             .foregroundColor(disable ? .gray : .black)
-            .font(.system(size: 30, weight: .bold))
+            .padding(15)
+            .font(font)
     }
 }
 

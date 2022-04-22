@@ -5,11 +5,14 @@ import AVFoundation
 struct MusicPlayerView: View {
     @ObservedObject var actualInteractionController : MusicPlayerController
     @ObservedObject var mainController : MainViewController
-    @State private var timeRemaining : Int?
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var body: some View {
+        let actualInteraction = mainController.currentInteraction.interationArray[actualInteractionController.actualInteractionCounter]
+        let interactionArray = mainController.obtainInteractionArray()
+        var timeRemaining : Int? = actualInteraction.duration
+        
         VStack{
             ZStack {
                 Image("musicalRectangle")
@@ -18,121 +21,120 @@ struct MusicPlayerView: View {
                     .padding(35)
                     .position(actualInteractionController.rectanglePosition)
                 
-                HStack{
-                    let actualInteraction = mainController.currentInteraction.interationArray[actualInteractionController.actualInteractionCounter]
-                    
-                    ForEach($actualInteractionController.notes) {
-                        $note in
-                        MusicalNoteComponentView(musicalNoteModel: note)
-                            .gesture(
-                                DragGesture()
-                                    .onChanged { value in
-                                        
-                                        if !actualInteraction.disableNoteDrag {
-                                            note.position.x = value.location.x
-                                            note.position.y = value.location.y
-                                            
-                                            note.color = Color.gray
-                                            
-                                            if actualInteractionController.musicalRectangleContainsItem(itemPosition: note.position) {
-                                                note.color = Color.red
-                                            }
-                                
-                                        }
-                                    }.onEnded { value in
-                                        withAnimation(.spring()) {
-                                            if actualInteractionController.musicalRectangleContainsItem(itemPosition: note.position) {
-                                                note.color = Color.blue
-                                                if !(actualInteractionController.notesInsideMusicalDiagram.contains(where: {$0.note == note.note})) {
-                                                    actualInteractionController.notesInsideMusicalDiagram.append(note)
+                ScrollView(.horizontal) {
+                    HStack{
+                        ForEach($actualInteractionController.notes) {
+                            $note in
+                            MusicalNoteComponentView(musicalNoteModel: note)
+                                .gesture(
+                                    DragGesture(minimumDistance: 0)
+                                        .onChanged { value in
+                                            if !actualInteraction.disableNoteDrag {
+                                                note.position.x = value.location.x
+                                                note.position.y = value.location.y
+                                                
+                                                note.color = Color.gray
+                                                note.onDrag = true
+                                                
+                                                if actualInteractionController.musicalRectangleContainsItem(itemPosition: note.position) {
+                                                    note.color = Color.red
                                                 }
                                             }
-                                            else {
-                                                if let index = actualInteractionController.notesInsideMusicalDiagram.firstIndex(where: {$0.note == note.note}) {
-                                                    actualInteractionController.notesInsideMusicalDiagram.remove(at: index)
+                                            
+                                        }.onEnded { value in
+                                            withAnimation(.spring()) {
+                                                
+                                                if actualInteractionController.musicalRectangleContainsItem(itemPosition: note.position) {
+                                                    note.color = Color.blue
+                                                    if !(actualInteractionController.notesInsideMusicalDiagram.contains(where: {$0.note == note.note})) {
+                                                        actualInteractionController.notesInsideMusicalDiagram.append(note)
+                                                    }
                                                 }
+                                                else {
+                                                    if let index = actualInteractionController.notesInsideMusicalDiagram.firstIndex(where: {$0.note == note.note}) {
+                                                        actualInteractionController.notesInsideMusicalDiagram.remove(at: index)
+                                                    }
+                                                }
+                                                
+                                                note.onDrag = false
+                                            
                                             }
                                         }
-                                    }
-                            ).padding(70)
-                    }
+                                )
+                                .padding([.trailing], 10)
+                        }
+                    }.padding(75)
                 }
                 
-                if let interationArray = mainController.obtainInteractionArray() {
+                if actualInteraction.text != nil {
                     InterationText(
-                        interaction: interationArray[actualInteractionController.actualInteractionCounter],
-                        hide: false
+                        interaction: actualInteraction
                     ).animation(.spring(response: 1), value: actualInteractionController.actualInteractionCounter)
                 }
                 
             }.onReceive((timer)) { time in
-                let interactionArray = mainController.obtainInteractionArray()
-           
+
                 if timeRemaining != nil {
                     if timeRemaining! > 0 {
                         timeRemaining! -= 1
                         return
                     }
                     
-                    if !(actualInteractionController.updateInteration(interactionArray: interactionArray)) {
-                        mainController.currentInteraction = actualInteractionController.nextInteraction
-                        return
-                    }
-                    
-                    timeRemaining = interactionArray[actualInteractionController.actualInteractionCounter].duration
+                    actualInteractionController.updateInteration(
+                        interactionArray: interactionArray,
+                        mainController: mainController
+                    )
                 }
+
             }
             
             HStack{
-                let interactionArray = mainController.obtainInteractionArray()
-                let buttonDisable : Bool = interactionArray[actualInteractionController.actualInteractionCounter].disablePlayButton
-                let speedDisable : Bool = interactionArray[actualInteractionController.actualInteractionCounter].disableSpeedControl
-                
                 Button {
-                    if buttonDisable {return}
+                
+                    if !actualInteractionController.notesInsideMusicalDiagram.isEmpty {
+                        
+                        if actualInteraction.generatadeNotes != nil {
+                            actualInteractionController.changeDiagramNotes(newNotes: actualInteraction.generatadeNotes!)
+                            
+                            withAnimation(.spring()){
+                                actualInteractionController.notes = actualInteractionController.notesInsideMusicalDiagram
+                            }
+                            
+                        }
+                        
+                        actualInteractionController.playDigramNotes()
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + Double(2/actualInteractionController.musicSpeed)) {
+                            actualInteractionController.updateInteration(
+                                interactionArray: interactionArray,
+                                mainController: mainController
+                            )
+                        }
                     
-                    var noteFileNames : [String] = []
-                    
-                    for musicalNote in actualInteractionController.notesInsideMusicalDiagram {
-                        noteFileNames.append(musicalNote.note.rawValue)
                     }
-                    
-                    if !noteFileNames.isEmpty {
-                        actualInteractionController.playMutipleSounds (
-                            soundFileNames: noteFileNames,
-                            withDelay: actualInteractionController.musicSpeed
-                        )
-                    }
-                    
-                    if !(actualInteractionController.updateInteration(interactionArray: interactionArray)) {
-                        mainController.currentInteraction = actualInteractionController.nextInteraction
-                    }
-                    
-                    timeRemaining = interactionArray[actualInteractionController.actualInteractionCounter].duration
                     
                 } label: {
+                    
                     Label("Play", systemImage: "play.fill")
-                        .foregroundColor(buttonDisable ? .gray : .black)
-                        .font(.system(size: 25, weight: .bold))
-                }.disabled(buttonDisable)
+                        .foregroundColor(actualInteractionController.notesInsideMusicalDiagram.isEmpty || actualInteraction.disablePlayButton ? .gray : .black)
+                        .font(.title)
+                    
+                    
+                }.disabled(
+                    actualInteractionController.notesInsideMusicalDiagram.isEmpty || actualInteraction.disablePlayButton
+                )
                 
                 Spacer()
                 
                 SpeedControllComponent(
                     musicSpeed: $actualInteractionController.musicSpeed,
-                    disable: speedDisable
+                    disable: actualInteraction.disableSpeedControl
+                    
                 )
                 
             }.padding(35)
             
         }
-        .onAppear {
-            timeRemaining = mainController.currentInteraction.interationArray[actualInteractionController.actualInteractionCounter].duration
-        }
     }
 }
-
-
-
-
 

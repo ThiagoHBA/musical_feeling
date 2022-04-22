@@ -17,6 +17,7 @@ let package = Package(
             name: "MusicalFeeling",
             targets: ["AppModule"],
             bundleIdentifier: "thiagohba.com.MusicalFeeling",
+            teamIdentifier: "685GVH2XJC",
             displayVersion: "1.0",
             bundleVersion: "1",
             iconAssetName: "AppIcon",
@@ -26,8 +27,10 @@ let package = Package(
                 .phone
             ],
             supportedInterfaceOrientations: [
+                .portrait,
                 .landscapeRight,
                 .landscapeLeft,
+                .portraitUpsideDown(.when(deviceFamilies: [.pad]))
             ]
         )
     ],

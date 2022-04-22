@@ -14,6 +14,7 @@ struct MusicalNoteComponentView: View {
                 .padding(15)
                 .background(self.musicalNoteModel!.color)
                 .cornerRadius(25)
+                .shadow(color: .black, radius: 5, y: musicalNoteModel.onDrag ? 10 : 5)
                 .position(
                     x: self.musicalNoteModel.position.x,
                     y: self.musicalNoteModel.position.y

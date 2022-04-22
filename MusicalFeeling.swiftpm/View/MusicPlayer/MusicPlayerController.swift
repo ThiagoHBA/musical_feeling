@@ -2,16 +2,17 @@ import SwiftUI
 import AVFoundation
 
 class MusicPlayerController : ObservableObject {
-    @Published var musicSpeed = 2
+    @Published var musicSpeed : Int
     @Published var notesInsideMusicalDiagram : [MusicalNote] = []
     @Published var actualInteractionCounter : Int = 0
     @Published var notes : [MusicalNote]
     
-    let nextInteraction : Interations
+    let nextInteraction : Interations?
     
-    init(notes: [MusicalNote], nextInteraction: Interations) {
+    init(notes: [MusicalNote], nextInteraction: Interations? = nil, musicSpeed : Int = 2) {
         self.notes = notes
         self.nextInteraction = nextInteraction
+        self.musicSpeed = musicSpeed
     }
     
     private var players = [URL:AVAudioPlayer]()
@@ -83,38 +84,28 @@ class MusicPlayerController : ObservableObject {
         
     }
     
-    func updateInteration(interactionArray: [UserInterationModel]) -> Bool {
+    func updateInteration(interactionArray: [UserInterationModel], mainController : MainViewController) {
+        
         if self.actualInteractionCounter < interactionArray.count - 1 {
             self.actualInteractionCounter += 1
-            return true
+            return
         }
         
         self.actualInteractionCounter = 0
-        return false
         
-//        if actualInteraction.position > 0 {
-//            guard let interation = Interations.init(rawValue: actualInteraction.position) else {return}
-//
-//            if actualInteraction.counter < interation.interationArray.count - 1 {
-//                actualInteraction.counter += 1
-//            }
-//            else {
-//                actualInteraction.position += 1
-//                actualInteraction.counter = 0
-//            }
-//        }
-//        else{
-//            actualInteraction.position += 1
-//        }
+        if nextInteraction != nil {
+            mainController.currentInteraction = self.nextInteraction!
+        }
+        
     }
     
-    func playMutipleSounds(soundFileNames: [String]) {
+    private func playMutipleSounds(soundFileNames: [String]) {
         for soundName in soundFileNames {
             playSound(soundName: soundName)
         }
     }
     
-    func playMutipleSounds(soundFileNames: [String], withDelay: Int) {
+    private func playMutipleSounds(soundFileNames: [String], withDelay: Int) {
         DispatchQueue.global(qos: .default).async {
             for soundName in soundFileNames {
                   DispatchQueue.main.async {
@@ -125,8 +116,38 @@ class MusicPlayerController : ObservableObject {
          }
     }
     
-    func hideText(duration: Int) -> Bool {
+    func playDigramNotes() {
+        var noteFileNames : [String] = []
         
-        return false
+        for musicalNote in self.notesInsideMusicalDiagram {
+            noteFileNames.append(musicalNote.note.rawValue)
+        }
+        
+        if !noteFileNames.isEmpty {
+            self.playMutipleSounds (
+                soundFileNames: noteFileNames,
+                withDelay: self.musicSpeed
+            )
+        }
     }
+    
+    func changeDiagramNotes(newNotes: [MusicalNote]) {
+        let oldNotes = self.notesInsideMusicalDiagram
+        
+        self.notesInsideMusicalDiagram.removeAll()
+        
+        for i in 0...newNotes.count - 1 {
+            var note = newNotes[i]
+            
+            if !oldNotes.isEmpty {
+                note.position.x = oldNotes.first!.position.x - (CGFloat(i) * (UIScreen.main.bounds.width * 0.05))
+                note.position.y = oldNotes.first!.position.y + CGFloat((i * 30))
+                note.color = oldNotes.first!.color
+            }
+            
+            self.notesInsideMusicalDiagram.append(note)
+        }
+        
+    }
+
 }

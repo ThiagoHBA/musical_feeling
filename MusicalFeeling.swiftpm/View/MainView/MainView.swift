@@ -14,20 +14,21 @@ struct MainView: View {
     var body: some View {
         ZStack {
             switch mainController.currentInteraction {
-            case .first:
-                FirstInteractionView(mainController: mainController).transition(.opacity)
-            case .second:
-                SecondInteractionView(mainController: mainController).transition(.opacity)
-            case .third:
-                ThirdInteractionView(mainController: mainController).transition(.opacity)
-            case .fourth:
-                FourthInteractionView(mainController: mainController).transition(.opacity)
-            case .fifth:
-                FifthInteractionView(mainController: mainController).transition(.opacity)
-            case .sexth:
-                SexthInteractionView(mainController: mainController).transition(.opacity)
-            }
+                case .first:
+                    FirstInteractionView(mainController: mainController)
+                case .second:
+                    SecondInteractionView(mainController: mainController).transition(.move(edge: .trailing))
+                case .third:
+                    ThirdInteractionView(mainController: mainController).transition(.move(edge: .trailing))
+                case .fourth:
+                    FourthInteractionView(mainController: mainController).transition(.move(edge: .trailing))
+                case .fifth:
+                    FifthInteractionView(mainController: mainController).transition(.move(edge: .trailing))
+                case .sexth:
+                    SexthInteractionView(mainController: mainController).transition(.move(edge: .trailing))
+                }
         }
+        .background(.white)
         .animation(.default, value: mainController.currentInteraction)
     }
 }

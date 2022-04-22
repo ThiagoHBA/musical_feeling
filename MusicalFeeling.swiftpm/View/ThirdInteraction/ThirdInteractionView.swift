@@ -1,15 +1,9 @@
-//
-//  SwiftUIView.swift
-//  
-//
-//  Created by Thiago Henrique on 20/04/22.
-//
-
 import SwiftUI
 
 struct ThirdInteractionView: View {
     @StateObject private var thirdInteractionController = MusicPlayerController(
-        notes: [MusicalNote(note: Note.E), MusicalNote(note: Note.F)], nextInteraction: .fourth
+        notes: [MusicalNote(note: Note.C)], nextInteraction: .fourth,
+        musicSpeed: 8
     )
     @ObservedObject  var mainController : MainViewController
    

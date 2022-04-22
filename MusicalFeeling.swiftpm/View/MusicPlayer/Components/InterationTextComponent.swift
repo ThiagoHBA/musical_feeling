@@ -1,10 +1,3 @@
-//
-//  SwiftUIView.swift
-//  
-//
-//  Created by Thiago Henrique on 19/04/22.
-//
-
 import SwiftUI
 
 struct InterationText: View {
@@ -12,13 +5,13 @@ struct InterationText: View {
     var hide: Bool = false
     
     var body: some View {
-        Text(interaction.text)
+        Text(.init(interaction.text!))
             .multilineTextAlignment(.center)
-            .foregroundColor(.white)
-            .padding(25)
-            .background(.gray)
+            .padding(30)
+            .background(.white)
             .cornerRadius(20)
-            .offset(y: interaction.screenPosition.screenOffSet)
+            .shadow(color: .black, radius: 5, y: 5)
+            .offset(y: interaction.screenPosition!.screenOffSet)
             .animation(.spring(), value: 1.0)
             .opacity(hide ? 0 : 1)
     }

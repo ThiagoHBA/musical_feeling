@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SexthInteractionView: View {
     @StateObject private var sexthInteractionController = MusicPlayerController(
-        notes: [MusicalNote(note: Note.E), MusicalNote(note: Note.F)], nextInteraction: .first
+        notes: MusicalNote.allNotes()
     )
     @ObservedObject  var mainController : MainViewController
    

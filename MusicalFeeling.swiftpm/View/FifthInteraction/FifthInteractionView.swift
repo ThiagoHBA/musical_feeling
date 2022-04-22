@@ -1,17 +1,11 @@
-//
-//  SwiftUIView.swift
-//  
-//
-//  Created by Thiago Henrique on 20/04/22.
-//
-
 import SwiftUI
 
 struct FifthInteractionView: View {
     @StateObject private var fifthInteractionController = MusicPlayerController(
-        notes: [MusicalNote(note: Note.E), MusicalNote(note: Note.F)], nextInteraction: .sexth
+        notes: [MusicalNote(note: Note.C)],
+        nextInteraction: .sexth
     )
-    @ObservedObject  var mainController : MainViewController
+    @ObservedObject var mainController : MainViewController
    
     var body: some View {
         MusicPlayerView(

@@ -2,7 +2,7 @@ import SwiftUI
 
 struct FirstInteractionView : View {
     @StateObject private var firstInteractionController = MusicPlayerController(
-        notes: [MusicalNote(note: Note.G)], nextInteraction: .second
+        notes: [MusicalNote(note: Note.C)], nextInteraction: .second
     )
     @ObservedObject  var mainController : MainViewController
    
