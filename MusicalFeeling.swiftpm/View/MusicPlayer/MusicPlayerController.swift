@@ -18,10 +18,12 @@ class MusicPlayerController : ObservableObject {
     private var players = [URL:AVAudioPlayer]()
     private var duplicatePlayers = [AVAudioPlayer]()
     
-    var rectanglePosition = CGPoint (
-        x: UIScreen.main.bounds.size.width * 0.5,
-        y: UIScreen.main.bounds.size.height * 0.5
-    )
+    var rectanglePosition: CGPoint {
+            return CGPoint(
+                x: UIScreen.main.bounds.size.width * 0.5,
+                y: UIScreen.main.bounds.size.height * 0.5
+            )
+    }
     
     var rectangleFrame = (
         width: UIScreen.main.bounds.width * 0.9,

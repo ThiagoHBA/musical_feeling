@@ -2,7 +2,7 @@ import SwiftUI
 
 struct InterationText: View {
     var interaction : UserInterationModel
-    var hide: Bool = false
+    var onTapGesture : () -> Void
     
     var body: some View {
         Text(.init(interaction.text!))
@@ -13,7 +13,9 @@ struct InterationText: View {
             .shadow(color: .black, radius: 5, y: 5)
             .offset(y: interaction.screenPosition!.screenOffSet)
             .animation(.spring(), value: 1.0)
-            .opacity(hide ? 0 : 1)
+            .onTapGesture{
+                onTapGesture()
+            }
     }
 }
 

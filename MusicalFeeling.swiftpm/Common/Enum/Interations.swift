@@ -100,6 +100,7 @@ enum Interations : Int {
                         text: "What would happen if we change the **speed** that\nthis chord is played? Lets try with 8x speed",
                         screenPosition: .center,
                         duration: 4,
+                        disablePlayButton: true,
                         disableSpeedControl: true,
                         disableNoteDrag: true
                     ),

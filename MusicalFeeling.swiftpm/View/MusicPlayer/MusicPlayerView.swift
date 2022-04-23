@@ -5,6 +5,11 @@ import AVFoundation
 struct MusicPlayerView: View {
     @ObservedObject var actualInteractionController : MusicPlayerController
     @ObservedObject var mainController : MainViewController
+    @State var orientation = UIDevice.current.orientation
+    
+    let orientationChanged = NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)
+        .makeConnectable()
+        .autoconnect()
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -14,6 +19,7 @@ struct MusicPlayerView: View {
         var timeRemaining : Int? = actualInteraction.duration
         
         VStack{
+            if orientation.isLandscape {}
             ZStack {
                 Image("musicalRectangle")
                     .resizable()
@@ -69,7 +75,15 @@ struct MusicPlayerView: View {
                 
                 if actualInteraction.text != nil {
                     InterationText(
-                        interaction: actualInteraction
+                        interaction: actualInteraction,
+                        onTapGesture: {
+                            if actualInteraction.disablePlayButton {
+                                actualInteractionController.updateInteration(
+                                    interactionArray: interactionArray,
+                                    mainController: mainController
+                                )
+                            }
+                        }
                     ).animation(.spring(response: 1), value: actualInteractionController.actualInteractionCounter)
                 }
                 
@@ -133,7 +147,11 @@ struct MusicPlayerView: View {
                     
                 )
                 
-            }.padding(35)
+            }
+        
+            .padding(35)
+        }.onReceive(orientationChanged) { _ in
+            self.orientation = UIDevice.current.orientation
         }
     }
 }
