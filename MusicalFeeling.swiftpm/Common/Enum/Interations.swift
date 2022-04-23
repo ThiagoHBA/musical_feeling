@@ -43,14 +43,14 @@ enum Interations : Int {
                     UserInterationModel(
                         text: "This is a **Do major chord**, composed by the notes C E G",
                         screenPosition: .top,
-                        duration: 3,
+                        duration: 4,
                         disablePlayButton: true,
                         disableSpeedControl: true
                     ),
                     UserInterationModel(
-                        text: "Major chords usually express **happiness** and **joy feelings**",
+                        text: "Major chords usually express **happiness** and **joyful feelings**",
                         screenPosition: .top,
-                        duration: 3,
+                        duration: 4,
                         disablePlayButton: true,
                         disableSpeedControl: true
                     )
@@ -60,7 +60,7 @@ enum Interations : Int {
                     UserInterationModel(
                         text: "Now, let's try something new",
                         screenPosition: .center,
-                        duration: 3,
+                        duration: 2,
                         disablePlayButton: true,
                         disableSpeedControl: true
                     ),
@@ -74,21 +74,21 @@ enum Interations : Int {
                     UserInterationModel(
                         text: "That sound that you hear is also a Do chord\nbut, now, minor",
                         screenPosition: .top,
-                        duration: 3,
+                        duration: 4,
                         disablePlayButton: true,
                         disableSpeedControl: true
                     ),
                     UserInterationModel(
                         text: "You can notice that this chord brings with it\na **sadder** and **melancholic feeling**?",
                         screenPosition: .top,
-                        duration: 3,
+                        duration: 4,
                         disablePlayButton: true,
                         disableSpeedControl: true
                     ),
                     UserInterationModel(
                         text: "From one chord to another we modify only **one note**\nthe E became a Eb, amazing, right?",
                         screenPosition: .top,
-                        duration: 3,
+                        duration: 4,
                         disablePlayButton: true,
                         disableSpeedControl: true
                     )
@@ -98,6 +98,13 @@ enum Interations : Int {
                 return [
                     UserInterationModel(
                         text: "What would happen if we change the **speed** that\nthis chord is played? Lets try with 8x speed",
+                        screenPosition: .center,
+                        duration: 4,
+                        disableSpeedControl: true,
+                        disableNoteDrag: true
+                    ),
+                    UserInterationModel(
+                        text: "Drag the musical note to guitar chords and click **play**",
                         screenPosition: .bottom,
                         disableSpeedControl: true,
                         disableNoteDrag: false,
@@ -131,7 +138,7 @@ enum Interations : Int {
                     UserInterationModel(
                         text: "Let’s try something new again",
                         screenPosition: .center,
-                        duration: 3,
+                        duration: 2,
                         disablePlayButton: true,
                         disableSpeedControl: true
                     ),
@@ -145,7 +152,7 @@ enum Interations : Int {
                     UserInterationModel(
                         text: "Can you feel the tension? This is an **augmented Do chord**.",
                         screenPosition: .top,
-                        duration: 2,
+                        duration: 3,
                         disablePlayButton: true,
                         disableSpeedControl: true
                     ),
@@ -177,28 +184,28 @@ enum Interations : Int {
                     UserInterationModel(
                         text: "When you watch an **advertisement**, it is common to\nuse more Major Chords in hopes of bringing feelings\nof **happiness** to the viewer",
                         screenPosition: .center,
-                        duration: 5,
+                        duration: 6,
                         disablePlayButton: true,
                         disableSpeedControl: true
                     ),
                     UserInterationModel(
                         text: "In a **suspense** or **horror** movie, for example, the use of Augmented Chords\nare common, they cause **tension**, exactly what the director expects\nthat the watcher feel",
                         screenPosition: .center,
-                        duration: 6,
+                        duration: 7,
                         disablePlayButton: true,
                         disableSpeedControl: true
                     ),
                     UserInterationModel(
                         text: "Music is that beautiful thing that makes we feel in a several different ways",
                         screenPosition: .center,
-                        duration: 3,
+                        duration: 5,
                         disablePlayButton: true,
                         disableSpeedControl: true
                     ),
                     UserInterationModel(
                         text: "Can be with a head phone, speaker, actively participating in her creation\nor just appreciating her. She has the power to **change lifes**\nand express emotions",
                         screenPosition: .center,
-                        duration: 6,
+                        duration: 8,
                         disablePlayButton: true,
                         disableSpeedControl: true
                     ),

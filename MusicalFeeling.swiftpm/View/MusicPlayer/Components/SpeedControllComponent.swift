@@ -20,7 +20,7 @@ struct SpeedControllComponent: View {
             
             Button {}
         label: {
-            generalButtonLabel(label: "\(String(musicSpeed))x")
+            generalButtonLabel(label: "\(String(musicSpeed))x", action: false)
         }
         .disabled(disable)
             
@@ -42,28 +42,12 @@ struct SpeedControllComponent: View {
         .padding(15)
         .shadow(color: .black, radius: 5, y: 5
         )
-        .onAppear {
-//            if focus {
-//                
-//                DispatchQueue.global(qos: .default).async {
-//                    for _ in 0...3 {
-//                        DispatchQueue.main.async {
-//                              font = .largeTitle
-//                          }
-//                        usleep(1000000)
-//                        font = .title
-//                      }
-//                 }
-//                
-//            }
-            
-        }
 }
 
     @ViewBuilder
-    func generalButtonLabel(label: String) -> some View {
+    func generalButtonLabel(label: String, action: Bool = true) -> some View {
         Text(label)
-            .foregroundColor(disable ? .gray : .black)
+            .foregroundColor(disable ? .gray : action ? .blue : .black)
             .padding(15)
             .font(font)
     }

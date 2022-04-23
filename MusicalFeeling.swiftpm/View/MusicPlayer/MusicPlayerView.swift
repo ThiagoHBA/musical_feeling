@@ -33,11 +33,11 @@ struct MusicPlayerView: View {
                                                 note.position.x = value.location.x
                                                 note.position.y = value.location.y
                                                 
-                                                note.color = Color.gray
+                                                note.toBePlaying = false
                                                 note.onDrag = true
                                                 
                                                 if actualInteractionController.musicalRectangleContainsItem(itemPosition: note.position) {
-                                                    note.color = Color.red
+                                                    note.toBePlaying = true
                                                 }
                                             }
                                             
@@ -45,12 +45,13 @@ struct MusicPlayerView: View {
                                             withAnimation(.spring()) {
                                                 
                                                 if actualInteractionController.musicalRectangleContainsItem(itemPosition: note.position) {
-                                                    note.color = Color.blue
+                                                    note.toBePlaying = true
                                                     if !(actualInteractionController.notesInsideMusicalDiagram.contains(where: {$0.note == note.note})) {
                                                         actualInteractionController.notesInsideMusicalDiagram.append(note)
                                                     }
                                                 }
                                                 else {
+                                                    note.toBePlaying = false
                                                     if let index = actualInteractionController.notesInsideMusicalDiagram.firstIndex(where: {$0.note == note.note}) {
                                                         actualInteractionController.notesInsideMusicalDiagram.remove(at: index)
                                                     }
@@ -88,7 +89,7 @@ struct MusicPlayerView: View {
 
             }
             
-            HStack{
+            HStack(alignment: .center){
                 Button {
                 
                     if !actualInteractionController.notesInsideMusicalDiagram.isEmpty {
@@ -116,7 +117,7 @@ struct MusicPlayerView: View {
                 } label: {
                     
                     Label("Play", systemImage: "play.fill")
-                        .foregroundColor(actualInteractionController.notesInsideMusicalDiagram.isEmpty || actualInteraction.disablePlayButton ? .gray : .black)
+                        .foregroundColor(actualInteractionController.notesInsideMusicalDiagram.isEmpty || actualInteraction.disablePlayButton ? .gray : .blue)
                         .font(.title)
                     
                     
@@ -133,7 +134,6 @@ struct MusicPlayerView: View {
                 )
                 
             }.padding(35)
-            
         }
     }
 }

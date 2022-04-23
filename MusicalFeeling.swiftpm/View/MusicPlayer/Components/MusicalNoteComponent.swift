@@ -13,7 +13,7 @@ struct MusicalNoteComponentView: View {
                 .font(.system(size: 35))
                 .padding(15)
                 .background(self.musicalNoteModel!.color)
-                .cornerRadius(25)
+                .cornerRadius(45)
                 .shadow(color: .black, radius: 5, y: musicalNoteModel.onDrag ? 10 : 5)
                 .position(
                     x: self.musicalNoteModel.position.x,

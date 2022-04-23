@@ -5,8 +5,19 @@ struct MusicalNote{
     let id: UUID = UUID()
     var note: Note
     var position: CGPoint = CGPoint(x: 0.0, y: 0.0)
-    var color: Color = .gray
     var onDrag: Bool = false
+    var toBePlaying : Bool = false
+    var playing : Bool = false
+    var color: Color {
+        if playing {
+            return .red
+        }
+        else if toBePlaying {
+            return .blue
+        }
+        return .gray
+    }
+
     
     
     static func allNotes () -> [MusicalNote] {

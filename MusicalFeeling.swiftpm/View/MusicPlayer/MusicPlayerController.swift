@@ -111,6 +111,7 @@ class MusicPlayerController : ObservableObject {
                   DispatchQueue.main.async {
                       self.playSound(soundName: soundName)
                   }
+                
                 usleep(useconds_t(1000000 / withDelay))
               }
          }
@@ -142,7 +143,7 @@ class MusicPlayerController : ObservableObject {
             if !oldNotes.isEmpty {
                 note.position.x = oldNotes.first!.position.x - (CGFloat(i) * (UIScreen.main.bounds.width * 0.05))
                 note.position.y = oldNotes.first!.position.y + CGFloat((i * 30))
-                note.color = oldNotes.first!.color
+                note.toBePlaying = oldNotes.first!.toBePlaying
             }
             
             self.notesInsideMusicalDiagram.append(note)
